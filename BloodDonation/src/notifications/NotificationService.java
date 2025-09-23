@@ -1,36 +1,51 @@
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+package com.blood.model;
 
-public class NotificationService {
-    private Connection conn;
+import java.sql.Timestamp;
 
-    public NotificationService(Connection conn) {
-        this.conn = conn;
+public class Notification {
+    private int notificationId;
+    private int userId;
+    private String message;
+    private String status;
+    private Timestamp createdAt;
+
+    public Notification(int notificationId, int userId, String message, String status, Timestamp createdAt) {
+        this.notificationId = notificationId;
+        this.userId = userId;
+        this.message = message;
+        this.status = status;
+        this.createdAt = createdAt;
     }
 
-    // Insert a new notification
-    public void sendNotification(int userId, String message) throws SQLException {
-        String sql = "INSERT INTO notifications (user_id, message, read_status) VALUES (?, ?, FALSE)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
-            stmt.setString(2, message);
-            stmt.executeUpdate();
-        }
+    public int getNotificationId() {
+        return notificationId;
+    }
+    public int getUserId() {
+        return userId;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    // Retrieve unread notifications for a user
-    public List<String> getNotifications(int userId) throws SQLException {
-        List<String> notifications = new ArrayList<>();
-        String sql = "SELECT message FROM notifications WHERE user_id = ? AND read_status = FALSE";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    notifications.add(rs.getString("message"));
-                }
-            }
-        }
-        return notifications;
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }
